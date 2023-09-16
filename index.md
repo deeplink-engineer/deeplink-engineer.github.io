@@ -2,98 +2,93 @@
 layout: default
 title: Home
 nav_order: 1
-description: "Just the Docs is a responsive Jekyll theme with built-in search that is easily customizable and hosted on GitHub Pages."
+description: ""
 permalink: /
 ---
 
-# Focus on writing good documentation
-{: .fs-9 }
+{: .fw-700 }
+# DEEPLINK://ENGINEER
 
-Just the Docs gives your documentation a jumpstart with a responsive Jekyll theme that is easily customizable and hosted on GitHub Pages.
-{: .fs-6 .fw-300 }
+{: .fw-700 }
+## 누구세요?
+- Jang Taejin
+- Social Media
+  - Twitter: @jtjisgod / Instagram: @taejintaejinjangtaejin / Email: jtjisgod@gmail.com
+- 현재 소속:
+  - <b>LG Electronics</b> Software Center Cyber Security Governance Task (2023.07 ~)
+- 이전 소속:
+  - <b>Stealien</b> (2019.01 ~ 2023.06)
+  - 국민대학교 17학번
+  - Best of the Best 6기
+  - 한국디지털미디어고등학교 13기
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[View it on GitHub][Just the Docs repo]{: .btn .fs-5 .mb-4 .mb-md-0 }
+{: .fw-700 }
+## Deeplink 취약점 탄생 배경
+2019년, 안드로이드 어플리케이션 취약점을 찾기위해 해커원에 올라온 모든 취약점들을 분석하고 유형화하였습니다.
 
----
+유형화한 공격 방식들 중에서 deeplink를 이용한 어플리케이션 제어가 매우 흥미로웠습니다.<br/>
+Deeplink라는 공격 벡터를 이용한 공격들은 단순히 링크 클릭 한번으로 공격에 노출 될 수 있었습니다.
 
-{: .warning }
-> This website documents the features of the current `main` branch of the Just the Docs theme. See [the CHANGELOG]({% link CHANGELOG.md %}) for a list of releases, new features, and bug fixes.
+유형화하고 나서 보니,,, 공격 벡터는 deeplink인데 할 수 있는 것들이 다양해서 제보를 할 때 "deeplink 취약점" 이라고 하면서 제보를 했었습니다.
 
-Just the Docs is a theme for generating static websites with [Jekyll]. You can write source files for your web pages using [Markdown], the [Liquid] templating language, and HTML.[^1] Jekyll builds your site by converting all files that have [front matter] to HTML. Your [Jekyll configuration] file determines which theme to use, and sets general parameters for your site, such as the URL of its home page.
+이후부터는 "deeplink 취약점"이라는 말로 여기저기 알려지기 시작하더군요.<br/>
+('deeplink 취약점은 평가대상에서 제외한다.'는 KISA의 공지도있었고, 사람들도 deeplink 취약점이라고 하더라고요)
 
-Jekyll builds this Just the Docs theme docs website using the theme itself. These web pages show how your web pages will look *by default* when you use this theme. But you can easily *[customize]* the theme to make them look completely different!
+취약점을 찾으면 찾을수록, deeplink는 http protocol에서 get이나 post처럼 일종의 공격 벡터일 뿐인데 이거 자체를 취약점이라고 하면 안되겠다는 생각이 들었습니다.
 
-Browse the docs to learn more about how to use this theme.
+그래서 이후에는 "Deeplink를 통한 Webview Hijacking"이라는 말을 사용하면서 취약점 보고서를 작성하고 발표를 진행했습니다. 스틸리언 기술 블로그에 작성한 deeplink 내용 또한... webview hijacking 이라는 키워드를 사용했었습니다.
 
-## Getting started
+만, 계속 deeplink 취약점이라고 하면서 알려지는게 신기하네요.
 
-The [Just the Docs Template] provides the simplest, quickest, and easiest way to create a new website that uses the Just the Docs theme. To get started with creating a site, just click "[use the template]"!
+{: .fw-700 }
+## Deeplink로 공격이 왜 가능한거임?
+기본적으로 어플리케이션은 Java나 Kotlin, Swift등 플랫폼에 맞는 언어로 작성됩니다.<br/>
+안드로이드 어플리케이션 기준으로보면 Activity Layout XML을 통해서 UI를 구성하는것 보다는<br/>
+WebView를 통해서 HTML로 작성된 페이지를 보여주는게 더 간단하고 효율적이며 자유로우면서 기존에 html을 기준으로 작성된 라이브러리들을 잘 활용 할 수 있는 등의 이유로 약간 복잡하거나 화려하다 싶은 디자인들은 대부분 WebView로 제공하는 경우가 많습니다.<br/>
+(예를 들면, 게시물을 작성하고 읽을 때에는 CKEditor처럼 기존에 잘 만들어놓은 WYSIWYG을 재활용하기 딱 좋겠죠.)
 
-{: .note }
-To use the theme, you do ***not*** need to clone or fork the [Just the Docs repo]! You should do that only if you intend to browse the theme docs locally, contribute to the development of the theme, or develop a new theme based on Just the Docs.
+<br/>
+다양한 앱들을 분석해본 결과, 보통 이런 경우에 WebView로 제공하는 경우가 많더라구요.
+- 이벤트 페이지
+- 게시물 내용
+- 팝업 공지
+- 대부분의 쇼핑몰
+- 대부분의 배달앱
 
-You can easily set the site created by the template to be published on [GitHub Pages] – the [template README] file explains how to do that, along with other details.
+<br/>
+**여기서 한가지 합리적인 가설을 하나 제시 할 수 있습니다.**
+- A라는 어플리케이션 내부에서 연 WebView는 A라는 어플리케이션과 동일한 권한을 갖는다.
 
-If [Jekyll] is installed on your computer, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^2] And you will be able to deploy your local build to a different platform than GitHub Pages.
+<br/>
+왜 이런 가설을 제시 할 수 있을까요?<br/>
+단순히 생각 해보면 "어플리케이션에 이미 로그인 되어있는 상태에서, 내가 이벤트 참여하라고 이벤트 페이지 열었는데 다시 로그인 하라고 하면 되겠어? 로그인 세션 내놔!" 라는 이해관계에서 Webview가 로그인 세션을 Native App에게 요청 할 수 있겠죠. 아니면 Native App에서 처음부터 WebView의 Header 등에 세션을 넣어버릴수도 있구요.
 
-More specifically, the created site:
+이런 경우가 아니더라도, UI 등은 web으로 구현하는 Hybrid App이 많은데 카메라 사용이나 위치 좌표 사용, 파일 시스템 사용 등은 web에서 사용 할 수 없기 때문에 Native 코드를 활용 할 수 없습니다. 이 경우에는 javascript interface등을 통해서 파일을 읽고 쓰거나 위치 좌표를 가져오고 핸드폰 정보를 획득하는 경우가 많은데, 이 또한 위 가설과 맞는 이해관계이죠.
 
-- uses a gem-based approach, i.e. uses a `Gemfile` and loads the `just-the-docs` gem
-- uses the [GitHub Pages / Actions workflow] to build and publish the site on GitHub Pages
+따라서 저는 위 가설에 부합하는 어플리케이션들을 대량 분석하였고, 어플리케이션에서 webview를 무조건 신뢰하는 코드들을 찾아 공격에 활용했습니다.
 
-Other than that, you're free to customize sites that you create with the template, however you like. You can easily change the versions of `just-the-docs` and Jekyll it uses, as well as adding further plugins.
+<br/>
+생각보다 그렇게 짜는 사람 없을 것 같다구요?<br/>
+적어도 제 개인적인 느낌에는 다운로드 수가 100만회가 넘는 경우 앱들은 대부분 위 가설에 부합하는 이해관계가 존재했습니다. 100만회 정도 다운로드 했으면 이벤트 페이지는 보여줘야하기 때문이 아닐까 싶어요.
 
-{: .note }
-See the theme [README][Just the Docs README] for how to use the theme as a gem without creating a new site.
 
-## About the project
+{: .fw-700 }
+## 갑자기 왜 공개하는거임?
+Deeplink를 공격 벡터로 하는 어플리케이션의 취약점을 찾기위해 무작정 해피포인트 어플리케이션을 뜯어보며 취약점 분석을 진행했었습니다.
+당시에는 모든 코드를 분석하면서 3일간 쪽잠을 자며 어플리케이션을 분석하였습니다.
 
-Just the Docs is &copy; 2017-{{ "now" | date: "%Y" }} by [Patrick Marsceill](https://patrickmarsceill.com).
+지금은 숨쉬는듯 쉽게 어플리케이션을 분석할 수 있는 이유는 당시에 한달동안 어플리케이션만 100개 넘게 직접 손으로 까보고 분석하면서 노하우가 많이 들었기 때문인 것 같습니다.
 
-### License
+어플리케이션에서 관련 취약점을 찾을 수 있었고, 파급력을 인정받아 `CVE-2019-9140`를 부여받고 적지 않은 포상금을 받았습니다.
 
-Just the Docs is distributed by an [MIT license](https://github.com/just-the-docs/just-the-docs/tree/main/LICENSE.txt).
+이는 제가 다양한 어플리케이션을 분석하고 취약점을 찾아 제보하는데 큰 동기가 되었습니다.
 
-### Contributing
+당시에 하두 많이 취약점을 찾아 제보를 했었던 덕분(?)에 해당 년도에 명예의 전당 2위를 찍을 수 있었으나, KISA 에서는 아직 우리나라에는 잘 알려지지 않은 취약점이기 때문에 당분간 포상금을 줄 수 없다는 이야기를 들었습니다.
+<br/>
+(그게 지금까지도 평가대상에서 제외된 취약점이 된 것 같네요)
 
-When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. Read more about becoming a contributor in [our GitHub repo](https://github.com/just-the-docs/just-the-docs#contributing).
+평가 대상에서 제외도 되었고, 슬슬 꿀도 잘 빨았겠다.. 이제 공개해 볼까~? 했는데 벌써 몇년이 흘렀습니다.
 
-#### Thank you to the contributors of Just the Docs!
+그동안 메일이나 개인적으로 질문도 많이 받았고, 생각보다 한글로된 문서가 적어서 아직도 제가 작성한 기술블로그가 레퍼런스로 사용된다는 점에서 슬슬 공개해야 할 때가 된 것 같았습니다.
 
-<ul class="list-style-none">
-{% for contributor in site.github.contributors %}
-  <li class="d-inline-block mr-1">
-     <a href="{{ contributor.html_url }}"><img src="{{ contributor.avatar_url }}" width="32" height="32" alt="{{ contributor.login }}"></a>
-  </li>
-{% endfor %}
-</ul>
-
-### Code of Conduct
-
-Just the Docs is committed to fostering a welcoming community.
-
-[View our Code of Conduct](https://github.com/just-the-docs/just-the-docs/tree/main/CODE_OF_CONDUCT.md) on our GitHub repository.
-
-----
-
-[^1]: The [source file for this page] uses all three markup languages.
-
-[^2]: [It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll#creating-your-site).
-
-[Jekyll]: https://jekyllrb.com
-[Markdown]: https://daringfireball.net/projects/markdown/
-[Liquid]: https://github.com/Shopify/liquid/wiki
-[Front matter]: https://jekyllrb.com/docs/front-matter/
-[Jekyll configuration]: https://jekyllrb.com/docs/configuration/
-[source file for this page]: https://github.com/just-the-docs/just-the-docs/blob/main/index.md
-[Just the Docs Template]: https://just-the-docs.github.io/just-the-docs-template/
-[Just the Docs]: https://just-the-docs.com
-[Just the Docs repo]: https://github.com/just-the-docs/just-the-docs
-[Just the Docs README]: https://github.com/just-the-docs/just-the-docs/blob/main/README.md
-[GitHub Pages]: https://pages.github.com/
-[Template README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
-[GitHub Pages / Actions workflow]: https://github.blog/changelog/2022-07-27-github-pages-custom-github-actions-workflows-beta/
-[customize]: {% link docs/customization.md %}
-[use the template]: https://github.com/just-the-docs/just-the-docs-template/generate
+그래서 공개합니다!
